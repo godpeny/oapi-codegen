@@ -1,0 +1,119 @@
+components:
+    schemas:
+      ErrResponse:
+        properties:
+          msg:
+            type: string
+          request_id:
+            type: string
+        type: object
+      v1.Kaya:
+        properties:
+          cluster_id:
+            type: string
+        type: object
+info:
+    license:
+      name: MIT
+    title: kaya
+    version: 1.0.0
+openapi: 3.0.0
+paths:
+    /acl/api/v1/{clusterID}:
+      post:
+        operationId: createACL
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Kaya'
+          required: true
+        responses:
+          "200":
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrResponse'
+            description: OK
+          default:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrResponse'
+            description: Error
+        summary: create ACL Request
+        tags:
+        - ACL
+      get:
+        operationId: readACL
+        responses:
+          "200":
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/v1.Kaya'
+            description: OK
+          default:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrResponse'
+            description: Error
+        summary: get ACL Request
+        tags:
+        - ACL
+      parameters:
+        - in: path
+          name: clusterID
+          required: true
+          schema:
+            type: string
+    /acl/api/v1/mda/{ip}:
+      get:
+        operationId: checkIPFromMDA
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Kaya'
+          required: true
+        responses:
+          "200":
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrResponse'
+            description: OK
+          default:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrResponse'
+            description: Error
+        summary: check ip address from MDA api
+        tags:
+        - MDA
+      parameters:
+        - in: path
+          name: ip
+          required: true
+          schema:
+            type: string
+    /acl/api/v1/healthCheck/ping:
+      get:
+        operationId: checkIsAclServerOn
+        responses:
+          200:
+            description: "Acl Server is On"
+            content:
+              text/plain:
+                schema:
+                  type: string
+                  response: pong_acl  
+          400:
+            description: "Bad request"
+          404:
+            description: "Not found"
+        summary: check whether Acl server is on
+        tags:
+          - "ACL"
